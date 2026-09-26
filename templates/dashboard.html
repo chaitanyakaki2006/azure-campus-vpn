@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CampusVPN Guardian</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 20px 40px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 15px;
+            color: #64748b;
+        }
+
+        .status {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #16a34a;
+        }
+
+        .danger {
+            color: #dc2626;
+        }
+
+        .warning {
+            color: #d97706;
+        }
+
+        .diagnostic {
+            margin-top: 25px;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .diagnostic h2 {
+            margin-top: 0;
+        }
+
+        .network {
+            margin-top: 25px;
+            background: #111827;
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .network-flow {
+            font-size: 18px;
+            line-height: 2;
+        }
+
+        .refresh {
+            margin-top: 20px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🛡 CampusVPN Guardian</h1>
+    <p>Azure Hybrid VPN Diagnostic Dashboard</p>
+</div>
+
+<div class="container">
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>IKE</h3>
+
+            {% if status.ike %}
+                <div class="status success">✓ ESTABLISHED</div>
+            {% else %}
+                <div class="status danger">✗ FAILED</div>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h3>IPsec</h3>
+
+            {% if status.ipsec %}
+                <div class="status success">✓ INSTALLED</div>
+            {% else %}
+                <div class="status danger">✗ FAILED</div>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h3>Traffic</h3>
+
+            {% if status.traffic_active %}
+                <div class="status success">✓ ACTIVE</div>
+            {% else %}
+                <div class="status warning">⚠ NONE</div>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h3>Outbound Policy</h3>
+
+            {% if status.outbound %}
+                <div class="status success">✓ VALID</div>
+            {% else %}
+                <div class="status danger">✗ MISSING</div>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h3>Inbound Policy</h3>
+
+            {% if status.inbound %}
+                <div class="status success">✓ VALID</div>
+            {% else %}
+                <div class="status danger">✗ MISSING</div>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <div class="diagnostic">
+
+        <h2>Diagnostic Result</h2>
+
+        {% if status.severity == "success" %}
+            <h3 class="success">
+                ✓ {{ status.diagnosis }}
+            </h3>
+        {% elif status.severity == "danger" %}
+            <h3 class="danger">
+                ✗ {{ status.diagnosis }}
+            </h3>
+        {% else %}
+            <h3 class="warning">
+                ⚠ {{ status.diagnosis }}
+            </h3>
+        {% endif %}
+
+        <p>
+            Traffic In:
+            <strong>{{ status.traffic_in }} bytes</strong>
+        </p>
+
+        <p>
+            Traffic Out:
+            <strong>{{ status.traffic_out }} bytes</strong>
+        </p>
+
+        <button class="refresh"
+                onclick="location.reload()">
+            Run Diagnostic Again
+        </button>
+
+    </div>
+
+
+    <div class="network">
+
+        <h2>Hybrid VPN Architecture</h2>
+
+        <div class="network-flow">
+            Campus Network<br>
+            ↓<br>
+            strongSwan VPN Router<br>
+            ↓<br>
+            🔐 IKEv2 / IPsec<br>
+            ↓<br>
+            Azure VPN Gateway<br>
+            ↓<br>
+            Azure VNet<br>
+            ↓<br>
+            Azure Test VM
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
