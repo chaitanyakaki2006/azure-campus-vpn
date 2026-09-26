@@ -1,5 +1,9 @@
 # Project Abstract
 
 The project “Azure VPN Gateway Site-to-Site Tunnel to a Campus Router” focuses on establishing a secure hybrid network connection between a simulated campus network and an Azure Virtual Network using a Site-to-Site VPN. The solution uses an Ubuntu-based simulated campus VPN router running strongSwan, Azure VPN Gateway, IKEv2, and IPsec to provide secure communication between the campus network (10.20.0.0/24) and the Azure VNet (10.1.0.0/16).
+
+
 The project addresses two major VPN connectivity bottlenecks: IKE/IPsec proposal mismatches and asymmetric routing. IKE/IPsec configuration parameters are aligned to establish a compatible security association, while routing and IPsec policies are validated in both directions to ensure that traffic follows the correct path. Bidirectional connectivity is verified between the simulated campus router and an Azure test VM.
+
+
 To improve monitoring and troubleshooting, the project introduces CampusVPN Guardian, a diagnostic dashboard that reads the live strongSwan VPN state, IPsec status, traffic counters, and XFRM policies. It identifies VPN or routing conditions and provides corresponding diagnostic recommendations. The implemented solution demonstrates secure VPN connectivity, tunnel verification, routing validation, and centralized diagnostic visibility for a hybrid Azure networking environment.
